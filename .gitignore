@@ -8,4 +8,4 @@ node_modules
 *.code-workspace
 config.json
 package-lock.json
-src/output.css
+public/src/output.css
