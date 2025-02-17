@@ -2,9 +2,9 @@
   "name": "curoben",
   "version": "1.0.0",
   "description": "Repository per il compito visita specialistica di TPSI.",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "npm install -y && npx tailwindcss -i ./src/input.css -o ./src/output.css --watch"
+    "start": "npm install -y && npx tailwindcss -i ./public/src/input.css -o ./public/src/output.css --watch"
   },
   "repository": {
     "type": "git",
