@@ -1,0 +1,8 @@
+{
+    "tipologie": ["Cardiologia", "Psicologia", "Oncologia", "Ortopedia", "Neurologia"],
+    "cacheToken": "3614fd4c-8e96-4d0e-b475-393bb52af46b",
+    "cacheURLGet": "https://ws.cipiaceinfo.it/cache/get",
+    "cacheURLSet": "https://ws.cipiaceinfo.it/cache/set",
+    "cacheKey": "specialistiche",
+    "hours": [8,9,10,11,12]
+}
