@@ -4,10 +4,10 @@ const path = require("path");
 const http = require("http");
 const app = express();
 const fs = require('fs');
-const config = JSON.parse(fs.readFileSync('config.json'));
-config.ssl.ca = fs.readFileSync(__dirname + '/ca.pem');
+const configuration = JSON.parse(fs.readFileSync('configuration.json'));
+configuration.ssl.ca = fs.readFileSync(__dirname + '/ca.pem');
 const database= require("./database.js");
-const prenotazione=database(config, (JSON.parse(fs.readFileSync("config.json"))).tipologie);
+const prenotazione=database(configuration, (JSON.parse(fs.readFileSync("config.json"))).tipologie);
 
 
 

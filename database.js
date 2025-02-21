@@ -15,7 +15,7 @@ FOREIGN KEY (idType) REFERENCES type(id)
 
 const fs = require('fs');
 const mysql = require('mysql2');
-const conf = JSON.parse(fs.readFileSync('config.json'));
+const conf = JSON.parse(fs.readFileSync('configuration.json'));
 conf.ssl = {
    ca: fs.readFileSync(__dirname + '/ca.pem')
 }
