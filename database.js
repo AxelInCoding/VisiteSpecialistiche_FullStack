@@ -1,27 +1,6 @@
-/*
-CREATE TABLE IF NOT EXISTS type (
-id INT PRIMARY KEY AUTO_INCREMENT,
-name varchar(20)
-)
-
-CREATE TABLE IF NOT EXISTS booking (
-id int PRIMARY KEY AUTO_INCREMENT,
-idType int NOT NULL,
-date DATE NOT NULL,
-hour INT NOT NULL,
-name VARCHAR(50),
-FOREIGN KEY (idType) REFERENCES type(id) 
-*/
-
-const fs = require('fs');
 const mysql = require('mysql2');
-const conf = JSON.parse(fs.readFileSync('config.json'));
-conf.ssl = {
-   ca: fs.readFileSync(__dirname + '/ca.pem')
-}
 
-
-module.exports = function database(config,service){
+module.exports = function database(conf){
    const connection = mysql.createConnection(conf);
       const executeQuery = (sql) => {
          return new Promise((resolve, reject) => {
@@ -56,33 +35,29 @@ module.exports = function database(config,service){
             `);
          },
          insert: async (booking) => {
-            let sql = `
-               INSERT INTO booking(id, idType, date, hour, name)
-               VALUES (
-                  '${booking.id}', 
-                  '${booking.idType}', 
-                  '${booking.date}', 
-                  ${booking.hour}, 
-                  ${booking.name})
-                  `;
-            const result = await executeQuery(sql);
+            const response = await executeQuery(`SELECT name,id FROM type where id='${booking.idType}'`);
+            console.log(booking);
+            const template = `INSERT INTO booking (idType, date, hour, name) VALUES (${response[0].id}, '$DATE', ${booking.hour}, '$NAME')`;
+            let sql = template.replace("$DATE", booking.date);
+            sql = sql.replace("$NAME", booking.name);
+            return await executeQuery(sql);
          },
          select: async () => {
-            let sql = `
+            const sql = `
             SELECT b.id, t.name type, b.date, b.hour, b.name FROM booking AS b JOIN type as t ON b.idType = t.id 
             `;
-            const result = await executeQuery(sql);
-            console.log ("la result è: "+ result);
-            return result;
+            return await executeQuery(sql);
          },
-         selectAll: async () =>{
-            let sql= `
-            SELECT * FROM booking
+         selectTypes: async () =>{
+            const sql= `
+            SELECT name FROM type
             `;
-            const result = await executeQuery(sql);
-            console.log ("la result totale: "+ result);
-            return result;
-         }
+            return await executeQuery(sql);
+         },
+         truncate: async function () {
+            const sql = `TRUNCATE TABLE booking;`
+            return await executeQuery(sql);
+        }
       }
       database.createTables();
       return database;

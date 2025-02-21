@@ -1,13 +1,14 @@
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const http = require("http");
 const app = express();
 const fs = require('fs');
-const config = JSON.parse(fs.readFileSync('config.json'));
-config.ssl.ca = fs.readFileSync(__dirname + '/ca.pem');
+const configuration = JSON.parse(fs.readFileSync('configuration.json'));
+configuration.ssl.ca = fs.readFileSync(__dirname + '/ca.pem');
 const database= require("./database.js");
-const prenotazione=database(config, (JSON.parse(fs.readFileSync("config.json"))).tipologie);
+const prenotazione=database(configuration);
 
 
 
@@ -25,29 +26,29 @@ app.use("/moment/dist/moment.js", express.static(path.join(__dirname, "/node_mod
 
 
 
-app.post("/add", async (req, res) => {
-    const data = req.body;
-    await prenotazione.insert(data);
+app.post("/insert", async (req, res) => {
+    const visits = req.body;
+    await prenotazione.insert(visits);
     res.json({ result: "Ok" });   
 });
 
-
-app.get("/get", async (req, res) => {
-    const dict = await prenotazione.selectAll();
-    res.json({ result: dict });
+app.get("/select", async (req, res) => {
+  const visits = await prenotazione.select();
+  console.log(visits)
+  res.json({ visits: visits });
 });
 
 
-app.get("/config", async (req, res) => {
-    const config = JSON.parse(fs.readFileSync('config.json'));
-    res.json(config);
+app.get("/types", async(req, res) => {
+  const types = await prenotazione.selectTypes();
+  res.json({ types: types });
 });
+
+
+
 
 const server = http.createServer(app);
 
 server.listen(80, () => {
     console.log("- server running");
 });
-
-
-
