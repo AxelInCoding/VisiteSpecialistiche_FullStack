@@ -9,3 +9,4 @@ node_modules
 config.json
 package-lock.json
 public/src/output.css
+configuration.json
