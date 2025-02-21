@@ -19,6 +19,9 @@ const conf = JSON.parse(fs.readFileSync('config.json'));
 conf.ssl = {
    ca: fs.readFileSync(__dirname + '/ca.pem')
 }
+
+
+module.exports = function database(config,service){
    const connection = mysql.createConnection(conf);
       const executeQuery = (sql) => {
          return new Promise((resolve, reject) => {
@@ -49,7 +52,7 @@ conf.ssl = {
             date DATE NOT NULL,
             hour INT NOT NULL,
             name VARCHAR(50),
-            FOREIGN KEY (idType) REFERENCES type(id)     
+            FOREIGN KEY (idType) REFERENCES type(id))     
             `);
          },
          insert: async (booking) => {
@@ -81,6 +84,6 @@ conf.ssl = {
             return result;
          }
       }
-      module.exports = database;
-
-      createTables();
+      database.createTables();
+      return database;
+}
