@@ -7,8 +7,6 @@ const app = express();
 const fs = require('fs');
 const configuration = JSON.parse(fs.readFileSync('configuration.json'));
 configuration.ssl.ca = fs.readFileSync(__dirname + '/ca.pem');
-const configuration = JSON.parse(fs.readFileSync('configuration.json'));
-configuration.ssl.ca = fs.readFileSync(__dirname + '/ca.pem');
 const database= require("./database.js");
 const prenotazione=database(configuration);
 
