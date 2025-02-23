@@ -1,52 +1,26 @@
-import {
-    parseConfiguration
-} from "./jsonParser.js"
-
 export function generateFetchComponent() {
-    let config;
     return {
-        build: (pathConfig) => {
-            return new Promise(function (resolve, reject) {
-                parseConfiguration(pathConfig).then((c) => {
-                    config = c;
-                    resolve("ok");
-                }).catch(reject);
-            })
+        addBook: async (data) => {
+            const res = await fetch ("/insert",{
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(data) 
+            }).catch(console.error);
+            return res.json();
         },
-        setData: (data) => {
-            return new Promise((resolve, reject) => {
-                fetch(config.cacheURLSet, {
-                        method: "POST",
-                        headers: {
-                            "content-type": "application/json",
-                            "key": config.cacheToken
-                        },
-                        body: JSON.stringify({
-                            key: config.cacheKey,
-                            value: JSON.stringify(data)
-                        })
-                    })
-                    .then(r => r.json())
-                    .then(data => resolve(data.result))
-                    .catch(err => reject(err.result));
-            });
+
+        getAllBooks: async () => {
+            const res = await fetch("/select").catch(console.error);
+            const allBooks = await res.json();
+            return allBooks.visits;
         },
-        getData: () => {
-            return new Promise((resolve, reject) => {
-                fetch(config.cacheURLGet, {
-                        method: "POST",
-                        headers: {
-                            "content-type": "application/json",
-                            "key": config.cacheToken
-                        },
-                        body: JSON.stringify({
-                            key: config.cacheKey
-                        })
-                    })
-                    .then(r => r.json())
-                    .then(data => resolve(data.result))
-                    .catch(err => reject(err.result));
-            })
+
+        getAllTypes: async () => {
+            const res = await fetch("/types").catch(console.error);
+            const allTypes = await res.json();
+            return allTypes.types;
         }
     };
 }
