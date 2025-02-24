@@ -49,6 +49,6 @@ app.get("/types", async(req, res) => {
 
 const server = http.createServer(app);
 
-server.listen(80, () => {
+server.listen(5600, () => {
     console.log("- server running");
 });

@@ -40,16 +40,21 @@ await navbar.callback(async (element) => {
         let validateInput;
         const date = moment(values[0], "YYYY/MM/DD");
         const closed = ["Saturday", "Sunday"];
-            
+
+        //Controllo data se inserita prima della data odierna o nel sabato o domenica
         if (date.calendar("MM/DD/YYYY") < moment().calendar("MM/DD/YYYY") || closed.includes(date.format("dddd")) || isNaN(values[1])) validateInput = false;
         for (let i = 0; i < values.length; i++) {
+
+            //tutti i controlli campi per evitare errori 
             if (!values[i]) {
                 validateInput = false;
                 document.getElementById("result").innerHTML = validateInput === true ? "Ok" : "Ko";
                 break;
             }
-        
+
         }
+
+        //select di tutte le prenotazioni del DB
         const res = await fetchComp.getAllBooks().catch(() => {
             console.log(res);
             validateInput = false;
@@ -57,8 +62,11 @@ await navbar.callback(async (element) => {
             return false;
         });
 
+        //filtra solo quelle dello stesso tipo di prenotazione selezionato.
         const prenotation = res.filter((e) => e.type.toLowerCase() === element.name.toLowerCase());
         for (let i = 0; i < prenotation.length; i++) {
+
+            //se esiste già una prenotazione per la stessa data e ora, l'inserimento è bloccato.
             if (prenotation[i].date.split("T")[0] === date["_i"] && prenotation[i].hour == values[1]) {
                 validateInput = false;
                 document.getElementById("result").innerHTML = validateInput === true ? "Ok" : "Ko";
@@ -74,12 +82,14 @@ await navbar.callback(async (element) => {
                 name: values[2]
             };
 
+            //aggiunta prenotazione
             await fetchComp.addBook(booking).catch((error) => {
                 validateInput = false;
                 document.getElementById("result").innerHTML = validateInput === true ? "Ok" : "Ko";
                 return false;
             });
 
+            //aggiornamento prenotazione
             const newData = await fetchComp.getAllBooks();
             table.buildTable(newData);
             table.render(element, offset);
