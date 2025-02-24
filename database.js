@@ -35,8 +35,8 @@ module.exports = function database(conf){
             `);
          },
          insert: async (booking) => {
-            const response = await executeQuery(`SELECT name,id FROM type where id='${booking.idType}'`);
-            console.log(booking);
+            const response = await executeQuery(`SELECT name,id FROM type where name='${booking.idType}'`);
+            console.log(response);
             const template = `INSERT INTO booking (idType, date, hour, name) VALUES (${response[0].id}, '$DATE', ${booking.hour}, '$NAME')`;
             let sql = template.replace("$DATE", booking.date);
             sql = sql.replace("$NAME", booking.name);
