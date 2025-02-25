@@ -6,7 +6,6 @@ node_modules
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
-config.json
 package-lock.json
 public/src/output.css
 configuration.json
