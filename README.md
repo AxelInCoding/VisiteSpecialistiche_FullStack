@@ -1,1 +1,3 @@
 # 5C_MarraKotis_VisiteSpecialistiche
+Questo progetto consente permette di prenotare delle visite di certe categorie per ogni settimana (corrente e futura). Un utente può prenotare più prenotazioni per diverse categorie come: **Cardiologia**, **Neurologia**...
+Il progetto è stato sviluppato in FUllStack, tramite NodeJS.
